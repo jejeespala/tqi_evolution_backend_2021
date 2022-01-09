@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "client")
 public class Client {
 
     @Id
@@ -39,11 +38,16 @@ public class Client {
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Address> addresses = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "client")
+    private List<Loan> loans = new ArrayList<>();
+
     @Column(nullable = false)
-    private double income;
+    private Long income;
 
     @Column(nullable = false)
     private String password;
 
-
+    public void addLoan(Loan loan){
+        loans.add(loan);
+    }
 }

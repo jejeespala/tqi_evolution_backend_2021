@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -21,29 +22,33 @@ public class ClientDTO {
 
     private Long id;
 
-    @NotEmpty
-    @Size(min = 2, max = 100)
+    @NotNull
+    @Size(min = 1, max = 100)
     private String name;
 
-    @NotEmpty
+    @NotNull
     @Email
     private String email;
 
-    @NotEmpty
+    @NotNull
     @org.hibernate.validator.constraints.br.CPF
     private String CPF;
 
-    @NotEmpty
+    @NotNull
     private String RG;
 
     @Valid
-    @NotEmpty
+    @NotNull
     private List<AddressDTO> addresses;
 
-    @NotEmpty
-    private double income;
+    @Valid
+    @NotNull
+    private List<LoanDTO> loans;
 
-    @NotEmpty
+    @NotNull
+    private Long income;
+
+    @NotNull
     private String password;
 
 

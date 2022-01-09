@@ -2,8 +2,11 @@ package com.loan.company.service;
 
 import com.loan.company.Mapper.ClientMapper;
 import com.loan.company.dto.ClientDTO;
+import com.loan.company.dto.LoanDTO;
 import com.loan.company.dto.MessageResponseDTO;
 import com.loan.company.entities.Client;
+import com.loan.company.exception.ClientNotFoundException;
+import com.loan.company.exception.LoanNotFoundException;
 import com.loan.company.repositories.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +19,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ClientService {
 
-    @Autowired
     private ClientRepository clientRepository;
+
+    private final LoanService loanService;
 
     private final ClientMapper clientMapper;
 
 
     public MessageResponseDTO create(ClientDTO clientDTO){
+
 
         Client client = clientMapper.toModel(clientDTO);
 
@@ -31,6 +36,16 @@ public class ClientService {
         MessageResponseDTO messageResponse = createMessageResponse("Client successfuly created with ID ", savedClient.getId());
 
         return messageResponse;
+
+
+    }
+
+    public MessageResponseDTO createLoan(Long clientId, Long loanId) throws ClientNotFoundException, LoanNotFoundException {
+
+        ClientDTO clientDTO = findById(clientId);
+        LoanDTO loanDTO = loanService.findById(loanId);
+
+
 
 
     }
@@ -50,6 +65,34 @@ public class ClientService {
                 .map(clientMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public ClientDTO findById(Long id) throws ClientNotFoundException {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ClientNotFoundException(id));
+
+        return clientMapper.toDTO(client);
+    }
+
+    public MessageResponseDTO update(Long id, ClientDTO clientDTO) throws ClientNotFoundException {
+        clientRepository.findById(id)
+                .orElseThrow(() -> new ClientNotFoundException(id));
+
+        Client updateClient = clientMapper.toModel(clientDTO);
+        Client client = clientRepository.save(updateClient);
+
+        MessageResponseDTO messageResponse = createMessageResponse("Client successfully updated with ID ", client.getId());
+
+        return messageResponse;
+    }
+
+    public void delete(Long id) throws ClientNotFoundException {
+        clientRepository.findById(id)
+                .orElseThrow(() -> new ClientNotFoundException(id));
+
+        clientRepository.deleteById(id);
+    }
+
+
 
     private MessageResponseDTO createMessageResponse(String s, Long id){
         return MessageResponseDTO.builder()
