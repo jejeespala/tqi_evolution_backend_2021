@@ -40,4 +40,11 @@ public class Address {
     @Column(nullable = false)
     private String UF;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+
+
+
 }

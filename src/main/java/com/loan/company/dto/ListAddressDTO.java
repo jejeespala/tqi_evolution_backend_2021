@@ -1,33 +1,41 @@
 package com.loan.company.dto;
 
-import com.loan.company.entities.Client;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoanDTO {
+public class ListAddressDTO {
 
     private Long id;
 
     @NotNull
-    private Long value;
+    private String street;
 
     @NotNull
-    private String dateInstallments;
+    private String number;
 
     @NotNull
-    private Integer installments;
+    private String district;
+
+    private String complement;
+
+    @NotNull
+    private String CEP;
+
+    @NotNull
+    private String city;
+
+    @NotNull
+    private String UF;
 
 
-    @Valid
-    private Client client;
+
 
 }

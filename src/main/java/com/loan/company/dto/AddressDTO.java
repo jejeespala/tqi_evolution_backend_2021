@@ -1,5 +1,6 @@
 package com.loan.company.dto;
 
+import com.loan.company.entities.Client;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,8 @@ public class AddressDTO {
 
     @NotNull
     private String UF;
+
+    private ClientDTO clientDTO;
 
 
 

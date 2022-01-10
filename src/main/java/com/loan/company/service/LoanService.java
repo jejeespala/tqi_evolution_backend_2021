@@ -28,26 +28,6 @@ public class LoanService {
 
     private final LoanMapper loanMapper;
 
-
-//    public MessageResponseDTO requestLoan(LoanDTO loanDTO){
-//
-//        Loan loan = clientMapper.toModel(loanDTO);
-//
-//        LocalDate today = LocalDate.now();
-//
-//        LocalDate limit = today.plusMonths(3);
-//
-//        if((loan.getDateInstallments().isAfter(limit)) && (loan.getInstallments() <= 60)){
-//
-//            Loan savedLoan = loanRepository.save(loan);
-//
-//            MessageResponseDTO messageResponse = createMessageResponse("Loan successfuly created with ID ", savedLoan.getId());
-//
-//            return messageResponse;
-//
-//        }
-//    }
-
     public MessageResponseDTO create(LoanDTO loanDTO){
 
 

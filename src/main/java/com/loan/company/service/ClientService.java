@@ -1,10 +1,13 @@
 package com.loan.company.service;
 
 import com.loan.company.Mapper.ClientMapper;
+import com.loan.company.Mapper.LoanMapper;
 import com.loan.company.dto.ClientDTO;
+import com.loan.company.dto.ListClientDTO;
 import com.loan.company.dto.LoanDTO;
 import com.loan.company.dto.MessageResponseDTO;
 import com.loan.company.entities.Client;
+import com.loan.company.entities.Loan;
 import com.loan.company.exception.ClientNotFoundException;
 import com.loan.company.exception.LoanNotFoundException;
 import com.loan.company.repositories.ClientRepository;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,17 +25,20 @@ public class ClientService {
 
     private ClientRepository clientRepository;
 
-    private final LoanService loanService;
-
     private final ClientMapper clientMapper;
+
+    private final LoanMapper loanMapper;
 
 
     public MessageResponseDTO create(ClientDTO clientDTO){
 
-
+        System.out.println("Chegou: "+clientDTO);
         Client client = clientMapper.toModel(clientDTO);
 
+        System.out.println(client);
+
         Client savedClient = clientRepository.save(client);
+
 
         MessageResponseDTO messageResponse = createMessageResponse("Client successfuly created with ID ", savedClient.getId());
 
@@ -40,29 +47,39 @@ public class ClientService {
 
     }
 
-    public MessageResponseDTO createLoan(Long clientId, Long loanId) throws ClientNotFoundException, LoanNotFoundException {
-
-        ClientDTO clientDTO = findById(clientId);
-        LoanDTO loanDTO = loanService.findById(loanId);
+    public MessageResponseDTO createLoan(ClientDTO clientDTO, LoanDTO loanDTO) throws ClientNotFoundException, LoanNotFoundException {
 
 
+        Client savedClient = clientMapper.toModel(clientDTO);
+
+        Loan savedLoan = loanMapper.toModel(loanDTO);
+
+
+
+        if(Objects.nonNull(savedLoan.getClient())){
+            savedLoan.getClient().getId();
+        }
+
+        savedClient.addLoan(savedLoan);
+        savedLoan.setClient(savedClient);
+
+        MessageResponseDTO messageResponse = createMessageResponse("Loan added successfuly with ID ", savedClient.getId());
+
+        return messageResponse;
 
 
     }
 
-    public List<ClientDTO> listAll(){
+    public List<ListClientDTO> listAll(){
 
         System.out.println("vai comerçar");
         List<Client> clients = clientRepository.findAll();
 
         System.out.println("MEUS CLIENTES " + clients);
 
-        System.out.println(clients.stream()
-                .map(clientMapper::toDTO)
-                .collect(Collectors.toList()));
 
         return clients.stream()
-                .map(clientMapper::toDTO)
+                .map(clientMapper::toListClientDTO)
                 .collect(Collectors.toList());
     }
 

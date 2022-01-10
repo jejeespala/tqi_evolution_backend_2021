@@ -1,12 +1,15 @@
 package com.loan.company.controller;
 
 import com.loan.company.dto.ClientDTO;
+import com.loan.company.dto.ListClientDTO;
+import com.loan.company.dto.LoanDTO;
 import com.loan.company.dto.MessageResponseDTO;
 import com.loan.company.entities.Client;
 import com.loan.company.exception.ClientNotFoundException;
 import com.loan.company.exception.LoanNotFoundException;
 import com.loan.company.repositories.ClientRepository;
 import com.loan.company.service.ClientService;
+import com.loan.company.service.LoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    private final LoanService loanService;
 
 
     @PostMapping
@@ -33,7 +37,7 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<ClientDTO> clients(){
+    public List<ListClientDTO> clients(){
 
         System.out.println("ENTROU");
         return clientService.listAll();
@@ -63,7 +67,10 @@ public class ClientController {
     @PostMapping(value = "/{clientId}/loan/{loanId}/add")
     public MessageResponseDTO requestLoan(@PathVariable Long clientId, @PathVariable Long loanId) throws ClientNotFoundException, LoanNotFoundException {
 
-        return clientService.createLoan(clientId, loanId);
+        ClientDTO clientDTO = clientService.findById(clientId);
+        LoanDTO loanDTO = loanService.findById(loanId);
+
+        return clientService.createLoan(clientDTO, loanDTO);
 
     }
 

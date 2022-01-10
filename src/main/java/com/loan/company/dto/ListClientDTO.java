@@ -5,11 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDTO {
+public class ListClientDTO {
 
     private Long id;
 
@@ -38,8 +35,6 @@ public class ClientDTO {
     private String RG;
 
     private List<ListAddressDTO> addresses;
-
-    private List<LoanDTO> loans;
 
     @NotNull
     private Long income;
